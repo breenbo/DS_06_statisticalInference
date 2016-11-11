@@ -1,0 +1,91 @@
+# Statistical inference Assignment
+By Bruno Berrehuel, 10th november 2016
+
+------------------------------------------------------------
+
+## Part 1 : Exponantial distribution
+
+------------------------------------------------------------
+
+### Overview
+
+In this part I'll do some investigations of the exponential distribution, with the R rexp(n, $\lambda$) function, and more precisely the distribution of averages of 40 exponentials distributions.
+In accordance with the Central Limit Theorem, I'll investigate if the mean $\mu$ is equal to $\frac{1}{\lambda}$ and the variance  of the distribution is equal to $\frac{\sigma^2}{n}$.
+For numerical purposes, $\lambda$ is choosen as $\lambda$ = $\frac{1}{5}$, so $\mu = \sigma = \frac{1}{\lambda} = 5$.
+
+Then I'll look at the distribution of 10 000 means of 40 exponential distributions, and verify that they are normal distribution $\mathcal{N}(\frac{1}{\lambda},\frac{\sigma^2}{n})$, as expected with the CLT.
+
+### Simulations
+
+Calculate 10 000 means of 40 exponantials distributions with $\lambda$=$\frac{1}{5}$ : for each i, calculate the mean of 40 exponantials distributions, then add it to the variables rexpMean and rexpVar. The rexpMean and rexpVar variables will contain 10 000 values each.
+
+\small
+```{r}
+set.seed(12345)
+rexpMean=NULL
+for (i in 1:10000) {
+    rexpMean = c(rexpMean, mean(rexp(40,0.2)))
+    rexpVar = c(rexpVar, var(rexp(40,0.2)))
+}
+```
+\normalsize
+
+### Sample mean and variance vs. theoricals
+
+Calculate the means of the mean and the variance of the sample with R, and compare with mean and variance expected.
+Recall that the expected sample mean $\mu=\frac{1}{\lambda}=5$ and the expected sample variance s=$\frac{\sigma^2}{n}=\frac{5^2}{40} \simeq$ `r round(25/40,3)`. The expected distribution variance is $\sigma^2=25$.
+
+\small
+```{r}
+data.frame(mean=mean(rexpMean), sampleVariance=var(rexpMean), variance=mean(rexpVar))
+```
+\normalsize
+
+The values are very close to the expected values : 
+`r abs(round((5-mean(rexpMean))/5*100,2))`% for the sample mean, 
+`r abs(round((0.625-var(rexpMean))/0.625*100,2))`% for the sample variance, and 
+`r abs(round((25-mean(rexpVar))/25*100,2))`% for the distribution variance.
+
+### Distribution
+
+Plot an histogram with the 10 000 previous calculation, and compare the shape with a normal distribution $\mathcal{N}(5,0.625)$, then compare the distributions using a quantile-quantile diagram :
+
+\small
+```{r}
+library(ggplot2)
+library(cowplot)
+dfRexp  <- data.frame(rMean=rexpMean, rVar=rexpVar)
+par(mfrow=c(1,2))
+histoMean <- ggplot(dfRexp, aes(x=rMean)) + 
+    geom_histogram(aes(y=..density..), color="black", fill="green", binwidth=0.1) +
+    geom_vline(aes(xintercept=5), color="red", size=1) +
+    stat_function(fun=dnorm, color="red", size=1,
+                  args=list(mean=5, sd=0.625))
+qqMean <- ggplot(dfRexp, aes(sample=rMean)) + stat_qq()
+
+plot_grid(histoMean, qqMean, labels=c("Compare shape","Compare quantiles"), ncol=1, nrow=2)
+```
+
+\normalsize
+
+### Conclusion
+
+\fbox{
+    \parbox[c][2\height]{\textwidth}{
+    \textbf{As points are aligned in the qqnorm diagram and with the shape of the histogram, the distribution of the mean follow the normal distribution $\mathcal{N}$(5,0.625), as expected with the CLT.
+    }}}
+
+\newpage
+
+------------------------------------------------------------
+
+## Part 2 : ToothGrowth Data Analysis
+
+------------------------------------------------------------
+
+```{r}
+library(datasets)
+library(dplyr)
+summary(ToothGrowth)
+data.frame(mean=mean(ToothGrowth$len), sd = sd(ToothGrowth$len))
+```

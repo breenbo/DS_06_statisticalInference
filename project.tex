@@ -70,7 +70,7 @@
 \part{Exponantial Distribution}
 \section{Overview}
 
-In this part I'll do some investigations of the exponential distribution, with the R function rexp(n, $\lambda$) and more precisely the distribution of averages of 40 exponentials distributions.
+In this part I'll do some investigations of the exponential distribution, with the R function \textbf{rexp(n, $\lambda$)} and more precisely the distribution of averages of 40 exponentials distributions.
 In accordance with the Central Limit Theorem, I'll investigate that the sample mean $\mu$ and the sample variance $s^2$ are :
 \begin{displaymath}
     \mu = \frac{1}{\lambda} \quad\mbox{and}\quad s^2 = \frac{\sigma^2}{n}
@@ -78,6 +78,7 @@ In accordance with the Central Limit Theorem, I'll investigate that the sample m
 
 Then I'll look at the distribution of 10 000 means of 40 exponential distributions, and verify that they follow a  normal distribution $\mathcal{N}(\mu,s^2)$, as expected with the CLT.
 
+\noindent
 For numerical purposes, $\lambda$ is choosen as $\lambda$ = 0.2, so $\mu = \sigma = \frac{1}{\lambda} = 5$.
 
 \section{Simulations}
@@ -118,6 +119,7 @@ The expected distribution variance is $\sigma^2=25$.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+\noindent
 The values are very close to the expected values : 
 
 \begin{itemize}
@@ -151,28 +153,33 @@ Plot an histogram with the 10 000 previous calculation, and compare the shape wi
 \includegraphics[width=\maxwidth]{figure/plots-1} 
 
 \end{knitrout}
-
 \section{Conclusion}
 
 \fbox{
     \parbox[c][1.5\height]{\textwidth}{
-        \textbf{As points are aligned in the qqnorm diagram and with the shape of the histogram, the distribution of the mean follow the normal distribution $\mathcal{N}$(5,0.625), as expected with the CLT.
+        \textbf{As points are aligned in the qqnorm diagram and with the shape of the histogram, the distribution of the mean follows the normal distribution $\mathcal{N}$(5,0.625), as expected with the CLT.
     }}}
 
 \newpage
 
 \part{ToothGrowth Data Analysis}
+The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}. Each experiment deals with 10 pigs.
+
+\noindent
+I'll try to answer the two following questions :
+\begin{enumerate}
+    \item Q1 : is the vitamin C effective for tooth growth ?
+    \item Q2 : what is the best delivery method between orange juice or ascorbic acid ?
+\end{enumerate}
+
 \section{Data exploratory}
 
-The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}. Each experiment concern 10 pigs.
-\medbreak
-First I'll take some informations about the means and the standard deviation of each dose with the dplyr package :
+First I'll take some informations about the means and the standard deviation of each dose, and plot the evolution of the tooth growth depending on the dose and the delivery method :
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{library}\hlstd{(datasets)}
-\hlkwd{library}\hlstd{(dplyr)}
-\hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{group_by}\hlstd{(supp,dose)} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{mean}\hlstd{(len),} \hlkwd{round}\hlstd{(}\hlkwd{sd}\hlstd{(len),}\hlnum{3}\hlstd{))}
+\hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{group_by}\hlstd{(supp,dose)} \hlopt{%>%}
+    \hlkwd{summarise}\hlstd{(}\hlkwd{mean}\hlstd{(len),} \hlkwd{round}\hlstd{(}\hlkwd{sd}\hlstd{(len),}\hlnum{3}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [6 x 4]
@@ -189,8 +196,122 @@ First I'll take some informations about the means and the standard deviation of 
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-1} 
+
+\end{knitrout}
+
+\noindent
+It seems that : 
+\begin{itemize}
+    \item H1 : odontoblasts are taller with a bigger dose of vitamin C, no matter of the delivery method.
+    \item H2 : orange juice (OJ) has better results than ascorbic acid (VC).
+\end{itemize}
 
 \section{Probability tests}
-\section{Conclusions}
 
+I define some variables form the ToothGrowth datasets, in order to compare with the R function \textbf{t.test} :
+\begin{itemize}
+    \item H1 : the mean of odontoblasts length at 0.5 mg/day dose with the mean at 2 mg/day
+    \item H2 : the means of odontoblasts length for the 2 delivery method ar each vitamin C dose.
+\end{itemize}
+\subsection{Tests for H1 hypothesis}
+First filter the ToothGrowth dataset depending on dose of vitamin C, for both of the delivery method, then do t.test to confirm that the mean at 2 mg/day is more important than the mean at 0.5 mg/day.
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{vita05} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{0.5}\hlstd{)}
+\hlstd{vita2} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{2}\hlstd{)}
+\hlkwd{t.test}\hlstd{(vita2}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{vita05}\hlopt{$}\hlstd{len,} \hlkwc{alternative}\hlstd{=}\hlstr{"greater"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  vita2$len - vita05$len
+## t = 11.291, df = 19, p-value = 3.595e-10
+## alternative hypothesis: true mean is greater than 0
+## 95 percent confidence interval:
+##  13.12216      Inf
+## sample estimates:
+## mean of x 
+##    15.495
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\subsection{Tests for H2 hypothesis}
+First filter the ToothGrowth dataset depending on dose of vitamin C and delivery method, then compare them with the t.test function.
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{oj05} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"OJ"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{0.5}\hlstd{)}
+\hlstd{vc05} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"VC"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{0.5}\hlstd{)}
+\hlkwd{t.test}\hlstd{(oj05}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{vc05}\hlopt{$}\hlstd{len,} \hlkwc{alternative}\hlstd{=}\hlstr{"greater"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  oj05$len - vc05$len
+## t = 2.9791, df = 9, p-value = 0.007736
+## alternative hypothesis: true mean is greater than 0
+## 95 percent confidence interval:
+##  2.019552      Inf
+## sample estimates:
+## mean of x 
+##      5.25
+\end{verbatim}
+\begin{alltt}
+\hlstd{oj1} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"OJ"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{1}\hlstd{)}
+\hlstd{vc1} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"VC"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{1}\hlstd{)}
+\hlkwd{t.test}\hlstd{(oj1}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{vc1}\hlopt{$}\hlstd{len,} \hlkwc{alternative}\hlstd{=}\hlstr{"greater"}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  oj1$len - vc1$len
+## t = 3.3721, df = 9, p-value = 0.004115
+## alternative hypothesis: true mean is greater than 0
+## 95 percent confidence interval:
+##  2.706401      Inf
+## sample estimates:
+## mean of x 
+##      5.93
+\end{verbatim}
+\begin{alltt}
+\hlstd{oj2} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"OJ"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{2}\hlstd{)}
+\hlstd{vc2} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"VC"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{2}\hlstd{)}
+\hlkwd{t.test}\hlstd{(oj2}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{vc2}\hlopt{$}\hlstd{len)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  oj2$len - vc2$len
+## t = -0.042592, df = 9, p-value = 0.967
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  -4.328976  4.168976
+## sample estimates:
+## mean of x 
+##     -0.08
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\section{Conclusions}
+\subsection{Is the vitamin C effective for tooth growth ?}
+As the t.test shows that the real mean of the 2 mg/day tooth growth is greater than the 0.5 mg/day tooth growth, the vitamin C threatment is effective for the pigs.
+\subsection{What is the best delivery method ?}
+The t.tests show that :
+\begin{itemize}
+    \item the orange juice delivery method is more effective than the ascorbic acid method for small doses, as the real tooth growth means are greater for orange juice for 0.5 and 1 mg/day doses.
+    \item the methods are equivalent for the dose 2 mg/day, as we failed to reject the null hypothesis that the means are equal.
+\end{itemize}
+\fbox{
+    \parbox[c][1.5\height]{\textwidth}{
+        \textbf{I recommend the delivery of vitamin C, by orange juice, for the tooth growth of the guinea pigs.}}}
 \end{document}

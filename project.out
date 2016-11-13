@@ -7,4 +7,8 @@
 \BOOKMARK [0][-]{part.2}{II ToothGrowth Data Analysis}{}% 7
 \BOOKMARK [1][-]{section.2.1}{Data exploratory}{part.2}% 8
 \BOOKMARK [1][-]{section.2.2}{Probability tests}{part.2}% 9
-\BOOKMARK [1][-]{section.2.3}{Conclusions}{part.2}% 10
+\BOOKMARK [2][-]{subsection.2.1}{Tests for H1 hypothesis}{section.2.2}% 10
+\BOOKMARK [2][-]{subsection.2.2}{Tests for H2 hypothesis}{section.2.2}% 11
+\BOOKMARK [1][-]{section.2.3}{Conclusions}{part.2}% 12
+\BOOKMARK [2][-]{subsection.2.1}{Is the vitamin C effective for tooth growth ?}{section.2.3}% 13
+\BOOKMARK [2][-]{subsection.2.2}{What is the best delivery method ?}{section.2.3}% 14

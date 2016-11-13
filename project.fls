@@ -111,6 +111,9 @@ INPUT figure/plots-1.pdf
 INPUT ./figure/plots-1.pdf
 INPUT ./figure/plots-1.pdf
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
+INPUT figure/unnamed-chunk-2-1.pdf
+INPUT ./figure/unnamed-chunk-2-1.pdf
+INPUT ./figure/unnamed-chunk-2-1.pdf
 INPUT project.aux
 INPUT ./project.out
 INPUT ./project.out

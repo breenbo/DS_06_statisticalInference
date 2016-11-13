@@ -68,7 +68,7 @@ The values are very close to the expected values :
 
 Plot an histogram with the 10 000 previous calculation, and compare the shape with a normal distribution $\mathcal{N}(5,0.625)$, then compare the distributions using a quantile-quantile diagram :
 
-<<plots, echo=TRUE, size="small", cache=TRUE>>=
+<<plots, echo=TRUE, size="small", fig.height=4, cache=TRUE>>=
 library(ggplot2)
 library(cowplot)
 dfRexp  <- data.frame(rMean=rexpMean, rVar=rexpVar)
@@ -80,7 +80,7 @@ histoMean <- ggplot(dfRexp, aes(x=rMean)) +
                   args=list(mean=5, sd=0.625))
 qqMean <- ggplot(dfRexp, aes(sample=rMean)) + stat_qq()
 
-plot_grid(histoMean, qqMean, ncol=1, nrow=2, 
+plot_grid(histoMean, qqMean, ncol=2, nrow=1, 
           labels=c("Compare shape","Compare quantiles"))
 @
 

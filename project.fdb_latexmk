@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1479037968 "project.tex" "project.pdf" "project" 1479037969
+["pdflatex"] 1479039232 "project.tex" "project.pdf" "project" 1479039232
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1471317721 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1471317719 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1471317719 1324 c910af8c371558dc20f2d7822f66fe64 ""
@@ -68,14 +68,14 @@
   "/usr/share/texmf/tex/latex/omscmtt.fd" 1478425223 607 06eee81c7b03b7b3b2af97278f259b7d ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1478801570 334519 93181721a3ed7013c51c1a25aff08071 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1478800943 3867704 7bebb8c083a240f8cccf752d9462495e ""
-  "figure/plots-1.pdf" 1478989145 52148 b0621dc44935058b3638f792ccfe5a06 ""
-  "project.aux" 1479037969 1570 5d2cb2957f852496a44f30898d93574a ""
-  "project.out" 1479037969 587 4910a7faae1a7f7389c9689c0f45e558 ""
-  "project.tex" 1479037968 8781 e892f69a284caa874396f01e5e2eda9d ""
-  "project.toc" 1479037969 726 bb30f8a6507fd925566ea0f1b47e4df7 ""
+  "figure/plots-1.pdf" 1479039231 48195 1441daf9999b2a701686eac7f16df88e ""
+  "project.aux" 1479039232 1570 71bdf77a92e3993caa6fec2a7ca426d3 ""
+  "project.out" 1479039232 587 4910a7faae1a7f7389c9689c0f45e558 ""
+  "project.tex" 1479039231 8781 e6a7dcfde6499b031b9be5213cd17221 ""
+  "project.toc" 1479039232 726 a7af77a888785ae5373f263dd2615b0b ""
   (generated)
+  "project.log"
   "project.out"
   "project.pdf"
-  "project.log"
   "project.aux"
   "project.toc"

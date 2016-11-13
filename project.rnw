@@ -7,10 +7,18 @@
 \author{Bruno Berrehuel}
 
 \maketitle
+\hrulefill{}
 \tableofcontents
 
-\section{Exponantial Distribution}
-\subsection{Overview}
+\makeatletter
+\@addtoreset{section}{part}
+\@addtoreset{subsection}{part}
+\@addtoreset{subsubsection}{part}
+\makeatother
+
+\newpage
+\part{Exponantial Distribution}
+\section{Overview}
 
 In this part I'll do some investigations of the exponential distribution, with the R function rexp(n, $\lambda$) and more precisely the distribution of averages of 40 exponentials distributions.
 In accordance with the Central Limit Theorem, I'll investigate that the sample mean $\mu$ and the sample variance $s^2$ are :
@@ -22,7 +30,7 @@ Then I'll look at the distribution of 10 000 means of 40 exponential distributio
 
 For numerical purposes, $\lambda$ is choosen as $\lambda$ = 0.2, so $\mu = \sigma = \frac{1}{\lambda} = 5$.
 
-\subsection{Simulations}
+\section{Simulations}
 
 Calculate 10 000 means of 40 exponantials distributions with $\lambda$=$\frac{1}{5}$ : for each i, calculate the mean of 40 exponantials distributions, then add it to the variables rexpMean and rexpVar. The rexpMean and rexpVar variables will contain 10 000 values each.
 
@@ -36,7 +44,7 @@ for (i in 1:10000) {
 }
 @
 
-\subsection{Sample mean and variance vs. theoricals}
+\section{Sample mean and variance vs. theoricals}
 
 Calculate the means of the mean and the variance of the sample with R, and compare with mean and variance expected.
 Recall that the expected sample mean $\mu$ and the expected sample variance s are :
@@ -44,12 +52,10 @@ Recall that the expected sample mean $\mu$ and the expected sample variance s ar
     \mu = \frac{1}{\lambda}=5 \quad\mbox{and}\quad s^2=\frac{\sigma^2}{n}=\frac{5^2}{40}\simeq \Sexpr{round(25/40,3)}
 \end{displaymath}
 The expected distribution variance is $\sigma^2=25$.
-
 <<dataframe, echo=TRUE, size="small", cache=TRUE>>=
 data.frame(mean=mean(rexpMean), sampleVariance=var(rexpMean), 
            variance=mean(rexpVar))
 @
-
 The values are very close to the expected values : 
 
 \begin{itemize}
@@ -58,7 +64,7 @@ The values are very close to the expected values :
     \item \Sexpr{abs(round((25-mean(rexpVar))/25*100,2))}\% for the distribution variance.
 \end{itemize}
 
-\subsection{Distribution}
+\section{Distribution}
 
 Plot an histogram with the 10 000 previous calculation, and compare the shape with a normal distribution $\mathcal{N}(5,0.625)$, then compare the distributions using a quantile-quantile diagram :
 
@@ -78,7 +84,7 @@ plot_grid(histoMean, qqMean, ncol=1, nrow=2,
           labels=c("Compare shape","Compare quantiles"))
 @
 
-\subsection{Conclusion}
+\section{Conclusion}
 
 \fbox{
     \parbox[c][1.5\height]{\textwidth}{
@@ -87,19 +93,19 @@ plot_grid(histoMean, qqMean, ncol=1, nrow=2,
 
 \newpage
 
-\section{ToothGrowth Data Analysis}
-\subsection{Data exploratory}
-The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}. Each experiment concern 10 pigs.
+\part{ToothGrowth Data Analysis}
+\section{Data exploratory}
 
+The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}. Each experiment concern 10 pigs.
+\medbreak
+First I'll take some informations about the means and the standard deviation of each dose with the dplyr package :
 <<echo=TRUE, size="small", cache=TRUE>>=
 library(datasets)
 library(dplyr)
-ToothGrowth %>% group_by(supp,dose) %>% summarise(mean(len))
-
-data.frame(mean=mean(ToothGrowth$len), sd = sd(ToothGrowth$len))
+ToothGrowth %>% group_by(supp,dose) %>% summarise(mean(len), round(sd(len),3))
 @
 
-\subsection{Probability tests}
-\subsection{Conclusions}
+\section{Probability tests}
+\section{Conclusions}
 
 \end{document}

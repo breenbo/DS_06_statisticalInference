@@ -57,10 +57,18 @@
 \author{Bruno Berrehuel}
 
 \maketitle
+\hrulefill{}
 \tableofcontents
 
-\section{Exponantial Distribution}
-\subsection{Overview}
+\makeatletter
+\@addtoreset{section}{part}
+\@addtoreset{subsection}{part}
+\@addtoreset{subsubsection}{part}
+\makeatother
+
+\newpage
+\part{Exponantial Distribution}
+\section{Overview}
 
 In this part I'll do some investigations of the exponential distribution, with the R function rexp(n, $\lambda$) and more precisely the distribution of averages of 40 exponentials distributions.
 In accordance with the Central Limit Theorem, I'll investigate that the sample mean $\mu$ and the sample variance $s^2$ are :
@@ -72,7 +80,7 @@ Then I'll look at the distribution of 10 000 means of 40 exponential distributio
 
 For numerical purposes, $\lambda$ is choosen as $\lambda$ = 0.2, so $\mu = \sigma = \frac{1}{\lambda} = 5$.
 
-\subsection{Simulations}
+\section{Simulations}
 
 Calculate 10 000 means of 40 exponantials distributions with $\lambda$=$\frac{1}{5}$ : for each i, calculate the mean of 40 exponantials distributions, then add it to the variables rexpMean and rexpVar. The rexpMean and rexpVar variables will contain 10 000 values each.
 
@@ -90,7 +98,7 @@ Calculate 10 000 means of 40 exponantials distributions with $\lambda$=$\frac{1}
 \end{kframe}
 \end{knitrout}
 
-\subsection{Sample mean and variance vs. theoricals}
+\section{Sample mean and variance vs. theoricals}
 
 Calculate the means of the mean and the variance of the sample with R, and compare with mean and variance expected.
 Recall that the expected sample mean $\mu$ and the expected sample variance s are :
@@ -98,7 +106,6 @@ Recall that the expected sample mean $\mu$ and the expected sample variance s ar
     \mu = \frac{1}{\lambda}=5 \quad\mbox{and}\quad s^2=\frac{\sigma^2}{n}=\frac{5^2}{40}\simeq 0.625
 \end{displaymath}
 The expected distribution variance is $\sigma^2=25$.
-
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -111,7 +118,6 @@ The expected distribution variance is $\sigma^2=25$.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-
 The values are very close to the expected values : 
 
 \begin{itemize}
@@ -120,7 +126,7 @@ The values are very close to the expected values :
     \item 0.32\% for the distribution variance.
 \end{itemize}
 
-\subsection{Distribution}
+\section{Distribution}
 
 Plot an histogram with the 10 000 previous calculation, and compare the shape with a normal distribution $\mathcal{N}(5,0.625)$, then compare the distributions using a quantile-quantile diagram :
 
@@ -146,7 +152,7 @@ Plot an histogram with the 10 000 previous calculation, and compare the shape wi
 
 \end{knitrout}
 
-\subsection{Conclusion}
+\section{Conclusion}
 
 \fbox{
     \parbox[c][1.5\height]{\textwidth}{
@@ -155,57 +161,36 @@ Plot an histogram with the 10 000 previous calculation, and compare the shape wi
 
 \newpage
 
-\section{ToothGrowth Data Analysis}
-\subsection{Data exploratory}
-The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}.
+\part{ToothGrowth Data Analysis}
+\section{Data exploratory}
 
+The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}. Each experiment concern 10 pigs.
+\medbreak
+First I'll take some informations about the means and the standard deviation of each dose with the dplyr package :
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(datasets)}
 \hlkwd{library}\hlstd{(dplyr)}
-\hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{group_by}\hlstd{(supp,dose)} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{mean}\hlstd{(len))}
+\hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{group_by}\hlstd{(supp,dose)} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{mean}\hlstd{(len),} \hlkwd{round}\hlstd{(}\hlkwd{sd}\hlstd{(len),}\hlnum{3}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
-## Source: local data frame [6 x 3]
+## Source: local data frame [6 x 4]
 ## Groups: supp [?]
 ## 
-##     supp  dose `mean(len)`
-##   <fctr> <dbl>       <dbl>
-## 1     OJ   0.5       13.23
-## 2     OJ   1.0       22.70
-## 3     OJ   2.0       26.06
-## 4     VC   0.5        7.98
-## 5     VC   1.0       16.77
-## 6     VC   2.0       26.14
-\end{verbatim}
-\begin{alltt}
-\hlkwd{count}\hlstd{(ToothGrowth, supp, dose)}
-\end{alltt}
-\begin{verbatim}
-## Source: local data frame [6 x 3]
-## Groups: supp [?]
-## 
-##     supp  dose     n
-##   <fctr> <dbl> <int>
-## 1     OJ   0.5    10
-## 2     OJ   1.0    10
-## 3     OJ   2.0    10
-## 4     VC   0.5    10
-## 5     VC   1.0    10
-## 6     VC   2.0    10
-\end{verbatim}
-\begin{alltt}
-\hlkwd{data.frame}\hlstd{(}\hlkwc{mean}\hlstd{=}\hlkwd{mean}\hlstd{(ToothGrowth}\hlopt{$}\hlstd{len),} \hlkwc{sd} \hlstd{=} \hlkwd{sd}\hlstd{(ToothGrowth}\hlopt{$}\hlstd{len))}
-\end{alltt}
-\begin{verbatim}
-##       mean       sd
-## 1 18.81333 7.649315
+##     supp  dose `mean(len)` `round(sd(len), 3)`
+##   <fctr> <dbl>       <dbl>               <dbl>
+## 1     OJ   0.5       13.23               4.460
+## 2     OJ   1.0       22.70               3.911
+## 3     OJ   2.0       26.06               2.655
+## 4     VC   0.5        7.98               2.747
+## 5     VC   1.0       16.77               2.515
+## 6     VC   2.0       26.14               4.798
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-\subsection{Probability tests}
-\subsection{Conclusions}
+\section{Probability tests}
+\section{Conclusions}
 
 \end{document}

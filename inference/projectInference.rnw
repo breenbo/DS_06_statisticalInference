@@ -1,15 +1,13 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage[colorlinks=true, urlcolor=blue,linkcolor=blue]{hyperref}
-\usepackage{layout}
-\usepackage[top=2cm, bottom=2cm, left=4cm, right=4cm]{geometry}
 
 \title{Statistical Inference Assignement \\ ToothGrowth Datas Analysis}
-\author{by Bruno Berrehuel}
+\author{by Bruno \textsc{Berrehuel}}
 
 \begin{document}
 \maketitle
 
-\section{Introduction}
+\section{Overview}
 The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}. Each experiment deals with 10 pigs.
 
 \noindent
@@ -22,13 +20,13 @@ I'll try to answer the two following questions :
 \section{Data exploratory}
 
 First I'll take some informations about the means and the standard deviation of each dose, and plot the evolution of the tooth growth depending on the dose and the delivery method :
-<<echo=3, size="small", cache=TRUE>>=
+<<filterDatas, echo=3, size="small", cache=TRUE>>=
 library(datasets)
 library(dplyr)
 ToothGrowth %>% group_by(supp,dose) %>% 
     summarise(mean(len), round(sd(len),3))
 @
-<<echo=FALSE, fig.height=3.55>>=
+<<plotDatas, echo=FALSE, fig.height=3.55>>=
 ggplot(ToothGrowth, aes(dose,len)) +
     geom_line(aes(color=factor(supp)), size=2, alpha=.5) +
     labs(title="Tooth growth depending on dose

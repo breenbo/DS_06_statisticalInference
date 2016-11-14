@@ -50,11 +50,10 @@
 
 \usepackage{alltt}
 \usepackage[colorlinks=true, urlcolor=blue,linkcolor=blue]{hyperref}
-\usepackage{layout}
-\usepackage[top=2cm, bottom=2cm, left=4cm, right=4cm]{geometry}
+%\usepackage[top=2cm, bottom=2cm, left=4cm, right=4cm]{geometry}
 
 \title{Statistical Inference Assignement \\ Exponantial Distribution}
-\author{by Bruno Berrehuel}
+\author{by Bruno \textsc{Berrehuel}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \maketitle
@@ -134,7 +133,7 @@ Plot an histogram with the 10 000 previous calculation, and compare the shape wi
     \hlkwd{stat_function}\hlstd{(}\hlkwc{fun}\hlstd{=dnorm,} \hlkwc{color}\hlstd{=}\hlstr{"red"}\hlstd{,} \hlkwc{size}\hlstd{=}\hlnum{1}\hlstd{,}
                   \hlkwc{args}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwc{mean}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{sd}\hlstd{=}\hlnum{0.625}\hlstd{))}
 \hlstd{qqMean} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(dfRexp,} \hlkwd{aes}\hlstd{(}\hlkwc{sample}\hlstd{=rMean))} \hlopt{+} \hlkwd{stat_qq}\hlstd{()}
-\hlkwd{plot_grid}\hlstd{(histoMean, qqMean,} \hlkwc{ncol}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{nrow}\hlstd{=}\hlnum{1}\hlstd{,}
+\hlkwd{plot_grid}\hlstd{(histoMean, qqMean,} \hlkwc{ncol}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{nrow}\hlstd{=}\hlnum{2}\hlstd{,}
           \hlkwc{labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"Compare shape"}\hlstd{,}\hlstr{"Compare quantiles"}\hlstd{))}
 \end{alltt}
 \end{kframe}

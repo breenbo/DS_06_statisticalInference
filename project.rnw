@@ -4,7 +4,7 @@
 \begin{document}
 
 \title{Statistical Inference Assignement}
-\author{Bruno Berrehuel}
+\author{by Bruno Berrehuel}
 
 \maketitle
 \hrulefill{}
@@ -70,7 +70,7 @@ The values are very close to the expected values :
 
 Plot an histogram with the 10 000 previous calculation, and compare the shape with a normal distribution $\mathcal{N}(5,0.625)$, then compare the distributions using a quantile-quantile diagram :
 
-<<plots, echo=TRUE, size="small", fig.height=4, cache=TRUE>>=
+<<plots, echo=3:12, size="small", fig.height=4, cache=TRUE>>=
 library(ggplot2)
 library(cowplot)
 dfRexp  <- data.frame(rMean=rexpMean, rVar=rexpVar)
@@ -81,7 +81,6 @@ histoMean <- ggplot(dfRexp, aes(x=rMean)) +
     stat_function(fun=dnorm, color="red", size=1,
                   args=list(mean=5, sd=0.625))
 qqMean <- ggplot(dfRexp, aes(sample=rMean)) + stat_qq()
-
 plot_grid(histoMean, qqMean, ncol=2, nrow=1, 
           labels=c("Compare shape","Compare quantiles"))
 @
@@ -107,7 +106,7 @@ I'll try to answer the two following questions :
 \section{Data exploratory}
 
 First I'll take some informations about the means and the standard deviation of each dose, and plot the evolution of the tooth growth depending on the dose and the delivery method :
-<<echo=3:8, size="small", cache=TRUE>>=
+<<echo=3, size="small", cache=TRUE>>=
 library(datasets)
 library(dplyr)
 ToothGrowth %>% group_by(supp,dose) %>% 
@@ -145,17 +144,24 @@ t.test(vita2$len-vita05$len, alternative="greater")
 
 \subsection{Tests for H2 hypothesis}
 First filter the ToothGrowth dataset depending on dose of vitamin C and delivery method, then compare them with the t.test function.
-<<echo=TRUE, size="small", cache=TRUE>>=
-oj05 <- ToothGrowth %>% filter(supp=="OJ") %>% filter(dose==0.5)
-vc05 <- ToothGrowth %>% filter(supp=="VC") %>% filter(dose==0.5)
-t.test(oj05$len-vc05$len, alternative="greater")
-oj1 <- ToothGrowth %>% filter(supp=="OJ") %>% filter(dose==1)
-vc1 <- ToothGrowth %>% filter(supp=="VC") %>% filter(dose==1)
-t.test(oj1$len-vc1$len, alternative="greater")
-oj2 <- ToothGrowth %>% filter(supp=="OJ") %>% filter(dose==2)
-vc2 <- ToothGrowth %>% filter(supp=="VC") %>% filter(dose==2)
-t.test(oj2$len-vc2$len)
+<<test lapply, echo=TRUE, size="small", cache=TRUE>>=
+indice <- c(0.5,1,2)
+OJ <- lapply(indice, function(i) {ToothGrowth %>% filter(supp=="OJ") %>% 
+             filter(dose==i)})
+VC <- lapply(indice, function(i) {ToothGrowth %>% filter(supp=="VC") %>% 
+             filter(dose==i)})
+t.test(OJ[[1]]$len-VC[[1]]$len, alternative="greater")
+t.test(OJ[[2]]$len-VC[[2]]$len, alternative="greater")
+t.test(OJ[[3]]$len-VC[[3]]$len)
 @
+\noindent
+We have the following results :
+\begin{itemize}
+    \item we can reject  $\mu_{OJ05} = \mu_{VC05}$ and accept  $\mu_{OJ05} > \mu_{VC05}$
+    \item we can reject  $\mu_{OJ1} = \mu_{VC1}$ and accept  $\mu_{OJ1} > \mu_{VC1}$
+    \item we failed to reject  $\mu_{OJ2} = \mu_{VC2}$
+\end{itemize}
+
 \section{Conclusions}
 \subsection{Is the vitamin C effective for tooth growth ?}
 As the t.test shows that the real mean of the 2 mg/day tooth growth is greater than the 0.5 mg/day tooth growth, the vitamin C threatment is effective for the pigs.

@@ -54,7 +54,7 @@
 \begin{document}
 
 \title{Statistical Inference Assignement}
-\author{Bruno Berrehuel}
+\author{by Bruno Berrehuel}
 
 \maketitle
 \hrulefill{}
@@ -135,8 +135,6 @@ Plot an histogram with the 10 000 previous calculation, and compare the shape wi
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{library}\hlstd{(ggplot2)}
-\hlkwd{library}\hlstd{(cowplot)}
 \hlstd{dfRexp}  \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{rMean}\hlstd{=rexpMean,} \hlkwc{rVar}\hlstd{=rexpVar)}
 \hlstd{histoMean} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(dfRexp,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=rMean))} \hlopt{+}
     \hlkwd{geom_histogram}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{y}\hlstd{=..density..),} \hlkwc{color}\hlstd{=}\hlstr{"black"}\hlstd{,}
@@ -145,7 +143,6 @@ Plot an histogram with the 10 000 previous calculation, and compare the shape wi
     \hlkwd{stat_function}\hlstd{(}\hlkwc{fun}\hlstd{=dnorm,} \hlkwc{color}\hlstd{=}\hlstr{"red"}\hlstd{,} \hlkwc{size}\hlstd{=}\hlnum{1}\hlstd{,}
                   \hlkwc{args}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwc{mean}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{sd}\hlstd{=}\hlnum{0.625}\hlstd{))}
 \hlstd{qqMean} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(dfRexp,} \hlkwd{aes}\hlstd{(}\hlkwc{sample}\hlstd{=rMean))} \hlopt{+} \hlkwd{stat_qq}\hlstd{()}
-
 \hlkwd{plot_grid}\hlstd{(histoMean, qqMean,} \hlkwc{ncol}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{nrow}\hlstd{=}\hlnum{1}\hlstd{,}
           \hlkwc{labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"Compare shape"}\hlstd{,}\hlstr{"Compare quantiles"}\hlstd{))}
 \end{alltt}
@@ -247,15 +244,18 @@ First filter the ToothGrowth dataset depending on dose of vitamin C and delivery
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{oj05} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"OJ"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{0.5}\hlstd{)}
-\hlstd{vc05} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"VC"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{0.5}\hlstd{)}
-\hlkwd{t.test}\hlstd{(oj05}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{vc05}\hlopt{$}\hlstd{len,} \hlkwc{alternative}\hlstd{=}\hlstr{"greater"}\hlstd{)}
+\hlstd{indice} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{0.5}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{)}
+\hlstd{OJ} \hlkwb{<-} \hlkwd{lapply}\hlstd{(indice,} \hlkwa{function}\hlstd{(}\hlkwc{i}\hlstd{) \{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"OJ"}\hlstd{)} \hlopt{%>%}
+             \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlstd{i)\})}
+\hlstd{VC} \hlkwb{<-} \hlkwd{lapply}\hlstd{(indice,} \hlkwa{function}\hlstd{(}\hlkwc{i}\hlstd{) \{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"VC"}\hlstd{)} \hlopt{%>%}
+             \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlstd{i)\})}
+\hlkwd{t.test}\hlstd{(OJ[[}\hlnum{1}\hlstd{]]}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{VC[[}\hlnum{1}\hlstd{]]}\hlopt{$}\hlstd{len,} \hlkwc{alternative}\hlstd{=}\hlstr{"greater"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## 
 ## 	One Sample t-test
 ## 
-## data:  oj05$len - vc05$len
+## data:  OJ[[1]]$len - VC[[1]]$len
 ## t = 2.9791, df = 9, p-value = 0.007736
 ## alternative hypothesis: true mean is greater than 0
 ## 95 percent confidence interval:
@@ -265,15 +265,13 @@ First filter the ToothGrowth dataset depending on dose of vitamin C and delivery
 ##      5.25
 \end{verbatim}
 \begin{alltt}
-\hlstd{oj1} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"OJ"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{1}\hlstd{)}
-\hlstd{vc1} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"VC"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{1}\hlstd{)}
-\hlkwd{t.test}\hlstd{(oj1}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{vc1}\hlopt{$}\hlstd{len,} \hlkwc{alternative}\hlstd{=}\hlstr{"greater"}\hlstd{)}
+\hlkwd{t.test}\hlstd{(OJ[[}\hlnum{2}\hlstd{]]}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{VC[[}\hlnum{2}\hlstd{]]}\hlopt{$}\hlstd{len,} \hlkwc{alternative}\hlstd{=}\hlstr{"greater"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## 
 ## 	One Sample t-test
 ## 
-## data:  oj1$len - vc1$len
+## data:  OJ[[2]]$len - VC[[2]]$len
 ## t = 3.3721, df = 9, p-value = 0.004115
 ## alternative hypothesis: true mean is greater than 0
 ## 95 percent confidence interval:
@@ -283,15 +281,13 @@ First filter the ToothGrowth dataset depending on dose of vitamin C and delivery
 ##      5.93
 \end{verbatim}
 \begin{alltt}
-\hlstd{oj2} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"OJ"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{2}\hlstd{)}
-\hlstd{vc2} \hlkwb{<-} \hlstd{ToothGrowth} \hlopt{%>%} \hlkwd{filter}\hlstd{(supp}\hlopt{==}\hlstr{"VC"}\hlstd{)} \hlopt{%>%} \hlkwd{filter}\hlstd{(dose}\hlopt{==}\hlnum{2}\hlstd{)}
-\hlkwd{t.test}\hlstd{(oj2}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{vc2}\hlopt{$}\hlstd{len)}
+\hlkwd{t.test}\hlstd{(OJ[[}\hlnum{3}\hlstd{]]}\hlopt{$}\hlstd{len}\hlopt{-}\hlstd{VC[[}\hlnum{3}\hlstd{]]}\hlopt{$}\hlstd{len)}
 \end{alltt}
 \begin{verbatim}
 ## 
 ## 	One Sample t-test
 ## 
-## data:  oj2$len - vc2$len
+## data:  OJ[[3]]$len - VC[[3]]$len
 ## t = -0.042592, df = 9, p-value = 0.967
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
@@ -302,6 +298,12 @@ First filter the ToothGrowth dataset depending on dose of vitamin C and delivery
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+We have the following results :
+\begin{itemize}
+    \item we can reject  $\mu_{OJ05} = \mu_{VC05}$ and accept  $\mu_{OJ05} > \mu_{VC05}$
+    \item we can reject  $\mu_{OJ1} = \mu_{VC1}$ and accept  $\mu_{OJ1} > \mu_{VC1}$
+    \item we failed to reject  $\mu_{OJ2} = \mu_{VC2}$
+\end{itemize}
 \section{Conclusions}
 \subsection{Is the vitamin C effective for tooth growth ?}
 As the t.test shows that the real mean of the 2 mg/day tooth growth is greater than the 0.5 mg/day tooth growth, the vitamin C threatment is effective for the pigs.

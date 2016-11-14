@@ -11,4 +11,4 @@
 \contentsline {subsection}{\numberline {2.2}Tests for H2 hypothesis}{5}{subsection.2.2}
 \contentsline {section}{\numberline {3}Conclusions}{6}{section.2.3}
 \contentsline {subsection}{\numberline {3.1}Is the vitamin C effective for tooth growth ?}{6}{subsection.2.1}
-\contentsline {subsection}{\numberline {3.2}What is the best delivery method ?}{6}{subsection.2.2}
+\contentsline {subsection}{\numberline {3.2}What is the best delivery method ?}{7}{subsection.2.2}

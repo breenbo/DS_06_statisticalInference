@@ -1,0 +1,93 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[colorlinks=true, urlcolor=blue,linkcolor=blue]{hyperref}
+\usepackage{layout}
+\usepackage[top=2cm, bottom=2cm, left=4cm, right=4cm]{geometry}
+
+\title{Statistical Inference Assignement \\ ToothGrowth Datas Analysis}
+\author{by Bruno Berrehuel}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+The datas are about the length of odontoblast (cells responsible for tooth growth) for 60 pigs after an experimental threatment in vitamin C. Each animal received a dose of vitamin C, from 0.5 to 2 mg/day, by orange juice (OJ) or ascorbic acid (VC)\footnote{Source : \url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html}}. Each experiment deals with 10 pigs.
+
+\noindent
+I'll try to answer the two following questions :
+\begin{enumerate}
+    \item Q1 : is the vitamin C effective for tooth growth ?
+    \item Q2 : what is the best delivery method between orange juice or ascorbic acid ?
+\end{enumerate}
+
+\section{Data exploratory}
+
+First I'll take some informations about the means and the standard deviation of each dose, and plot the evolution of the tooth growth depending on the dose and the delivery method :
+<<echo=3, size="small", cache=TRUE>>=
+library(datasets)
+library(dplyr)
+ToothGrowth %>% group_by(supp,dose) %>% 
+    summarise(mean(len), round(sd(len),3))
+@
+<<echo=FALSE, fig.height=3.55>>=
+ggplot(ToothGrowth, aes(dose,len)) +
+    geom_line(aes(color=factor(supp)), size=2, alpha=.5) +
+    labs(title="Tooth growth depending on dose
+         and delivery method")
+@
+
+\noindent
+It seems that : 
+\begin{itemize}
+    \item H1 : odontoblasts are taller with a bigger dose of vitamin C, no matter of the delivery method.
+    \item H2 : orange juice (OJ) has better results than ascorbic acid (VC).
+\end{itemize}
+
+\section{Probability tests}
+
+I define some variables form the ToothGrowth datasets, in order to compare with the R function \textbf{t.test} :
+\begin{itemize}
+    \item H1 : the mean of odontoblasts length at 0.5 mg/day dose with the mean at 2 mg/day
+    \item H2 : the means of odontoblasts length for the 2 delivery method ar each vitamin C dose.
+\end{itemize}
+\subsection{Tests for H1 hypothesis}
+First filter the ToothGrowth dataset depending on dose of vitamin C, for both of the delivery method, then do t.test to confirm that the mean at 2 mg/day is more important than the mean at 0.5 mg/day.
+
+<<echo=TRUE, size="small", cache=TRUE>>=
+vita05 <- ToothGrowth %>% filter(dose==0.5)
+vita2 <- ToothGrowth %>% filter(dose==2)
+t.test(vita2$len-vita05$len, alternative="greater")
+@
+
+\subsection{Tests for H2 hypothesis}
+First filter the ToothGrowth dataset depending on dose of vitamin C and delivery method, then compare them with the t.test function.
+<<test lapply, echo=TRUE, size="small", cache=TRUE>>=
+indice <- c(0.5,1,2)
+OJ <- lapply(indice, function(i) {ToothGrowth %>% filter(supp=="OJ") %>% 
+             filter(dose==i)})
+VC <- lapply(indice, function(i) {ToothGrowth %>% filter(supp=="VC") %>% 
+             filter(dose==i)})
+t.test(OJ[[1]]$len-VC[[1]]$len, alternative="greater")
+t.test(OJ[[2]]$len-VC[[2]]$len, alternative="greater")
+t.test(OJ[[3]]$len-VC[[3]]$len)
+@
+\noindent
+We have the following results :
+\begin{itemize}
+    \item we can reject  $\mu_{OJ05} = \mu_{VC05}$ and accept  $\mu_{OJ05} > \mu_{VC05}$
+    \item we can reject  $\mu_{OJ1} = \mu_{VC1}$ and accept  $\mu_{OJ1} > \mu_{VC1}$
+    \item we failed to reject  $\mu_{OJ2} = \mu_{VC2}$
+\end{itemize}
+
+\section{Conclusions}
+\subsection{Is the vitamin C effective for tooth growth ?}
+As the t.test shows that the real mean of the 2 mg/day tooth growth is greater than the 0.5 mg/day tooth growth, the vitamin C threatment is effective for the pigs.
+\subsection{What is the best delivery method ?}
+The t.tests show that :
+\begin{itemize}
+    \item the orange juice delivery method is more effective than the ascorbic acid method for small doses, as the real tooth growth means are greater for orange juice for 0.5 and 1 mg/day doses.
+    \item the methods are equivalent for the dose 2 mg/day, as we failed to reject the null hypothesis that the means are equal.
+\end{itemize}
+\fbox{
+    \parbox[c][1.5\height]{\textwidth}{
+        \textbf{I recommend the delivery of vitamin C, by orange juice, for the tooth growth of the guinea pigs.}}}
+\end{document}
